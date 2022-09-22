@@ -1,0 +1,123 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div id="div_signup">
+    <centre>
+        <form id="form_signup" method="post" asp-action="SignUp">
+            @*<center>
+                <object data="@Url.Content("~/login.svg")" width="200" height="200"> </object>
+            </center>*@
+            <label class="h1" style="width: 100%; text-align: center">Sign Up</label>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <center>
+                    <span class="text-danger" style="width: 100%; text-align: center;">
+                        @TempData["ErrorMessage"]
+                    </span>
+                </center>
+            }
+            else
+            {
+                <br />
+            }
+            <br />
+            <table>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="first_name" placeholder="First Name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="last_name" placeholder="Last Name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="phone" placeholder="Phone" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="email" placeholder="Email" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="password" type="password" placeholder="Password" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input name="confirm" type="password" placeholder="Confirm Password" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <button class="btn btn-primary" type="submit">SIGN UP</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 33% !important;">
+                        <hr />
+                    </td>
+                    <td style="width: 33% !important;">
+                        OR
+                    </td>
+                    <td style="width: 33% !important;">
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <a asp-action="Login" class="btn btn-secondary">LOGIN</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </centre>
+</div>
+
+<style>
+    #form_signup {
+        width: 35%;
+        margin: auto;
+        margin-top: 2%;
+        padding: 5%;
+        color: white !important;
+    }
+
+    #form_signup {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+        #form_signup input {
+            width: 100%;
+            padding: 3%;
+        }
+
+        #form_signup button, #form_signup a {
+            width: 100%;
+        }
+
+        #form_signup table {
+            width: 100%;
+            text-align: center;
+        }
+
+            #form_signup table tr {
+                width: 100%;
+            }
+
+            #form_signup table td {
+                padding-top: 5%;
+                width: 100%;
+            }
+</style>

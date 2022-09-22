@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+@{
+    var _email = Accessor.HttpContext.Session.GetString("email");
+    var _password = Accessor.HttpContext.Session.GetString("password");
+    var _first_name = Accessor.HttpContext.Session.GetString("first_name");
+    var _last_name = Accessor.HttpContext.Session.GetString("last_name");
+    var _phone = Accessor.HttpContext.Session.GetString("phone");
+    var _role = Accessor.HttpContext.Session.GetString("role");
+
+    ViewData["_email"] = _email;
+    ViewData["_password"] = _password;
+    ViewData["_first_name"] = _first_name;
+    ViewData["_last_name"] = _last_name;
+    ViewData["_phone"] = _phone;
+    ViewData["_role"] = _role;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - APPR_POE</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/APPR_POE.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark @*bg-primary*@">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="~/logo.png" width="150px" />
+                </a>
+                @if (!String.IsNullOrWhiteSpace(_email))
+                {
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarColor01">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Disasters" asp-action="Index">Disasters</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="MoneyDonations" asp-action="Index">Donations</a>
+                            </li>
+                            @if (_role == "admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Users" asp-action="Index">Users</a>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="navbar-nav" style="float: right !important; margin-right: 5% !important;">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    @_first_name @_last_name
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a asp-controller="Users" asp-action="Details" asp-route-id="@_email" class="dropdown-item">
+                                        My Account
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a asp-controller="Users" asp-action="Logout" class="dropdown-item">
+                                        Logout
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                        @*<form class="d-flex">
+                    <input class="form-control me-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    </form>*@
+                    </div>
+                }
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_LoggedIn" />
+            <partial name="_Notification" />
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2022 - APPR_POE - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<style>
+    .footer {
+        line-height: 30px !important;
+    }
+
+    .nav-item {
+        font-size: 20px;
+    }
+
+    body {
+        background-image: url('@Url.Content("~/main_bg.svg")') !important;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        background-size: cover;
+        margin: 0 !important;
+    }
+
+    * {
+        font-family: Arial !important;
+    }
+
+    nav {
+        background: rgba( 102, 0, 255, 0.3 ) !important;
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        margin-bottom: 1%;
+    }
+</style>

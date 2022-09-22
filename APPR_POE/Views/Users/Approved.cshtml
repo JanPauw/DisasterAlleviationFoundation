@@ -1,0 +1,200 @@
+﻿@model IEnumerable<APPR_POE.Models.User>
+
+@{
+    ViewData["Title"] = "Manage Users";
+
+    //Access Control - Admin Only
+    var _role = Accessor.HttpContext.Session.GetString("role");
+    var _email = Accessor.HttpContext.Session.GetString("email");
+
+    if (_role != "admin")
+    {
+        Context.Response.Redirect("/Users/Details/" + _email.ToString());
+    }
+}
+
+<div id="div_users">
+    <label class="h1">
+        Manage Users
+    </label>
+    <div id="div_top">
+        <center>
+            <table id="table_nav">
+                <tr>
+                    <td>
+                        <a asp-action="Index">NEW</a>
+                    </td>
+                    <td>
+                        <a class="active">APPROVED</a>
+                    </td>
+                    <td>
+                        <a asp-action="Denied">DENIED</a>
+                    </td>
+                </tr>
+            </table>
+        </center>
+        <table id="table_head">
+            <thead>
+                <tr>
+                    <td style="width: 75%;">
+                        User
+                    </td>
+                    <td style="text-align: center;">
+                        Deny
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="div_bottom">
+        <table id="table_body">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="width: 75%;">
+                            <a asp-action="Details" asp-route-id="@item.email" style="color: white; text-decoration: none;">
+                                @item.first_name @item.last_name <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        </td>
+                        <td style="text-align: center;">
+                            <form method="post" asp-action="Deny" id="form_deny">
+                                @Html.Hidden("email", item.email)
+                                <button class="btn btn-danger">Deny</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    #div_users {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_users {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_top {
+        width: 100%;
+    }
+
+    #table_nav {
+        width: 100%;
+        margin-bottom: 2%;
+    }
+
+    #table_nav {
+        background: rgba( 74, 74, 74, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 0px solid rgba( 255, 255, 255, 0.18 );
+        overflow: hidden !important;
+    }
+
+        #table_nav td {
+            width: 33%;
+            text-align: center;
+        }
+
+            #table_nav td a {
+                color: white;
+                text-decoration: none;
+                font-size: 20px;
+                display: block;
+                width: 100%;
+                padding: 2%;
+            }
+
+                #table_nav td a:hover {
+                    background: rgba( 102, 0, 255, 0.3 ) !important;
+                }
+
+        #table_nav .active {
+            background: rgba( 102, 0, 255, 0.7 ) !important;
+        }
+
+    #table_head {
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+        #table_head thead {
+            color: white;
+            background-color: #6600FF;
+            font-weight: bold;
+        }
+
+        #table_head tr {
+        }
+
+        #table_head td {
+            padding: 1%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+        }
+
+    #div_bottom {
+        width: 100%;
+        border-radius: 0px 0px 15px 15px !important;
+        max-height: 55vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #table_body {
+        width: 100%;
+    }
+
+        #table_body tbody {
+        }
+
+        #table_body tr:nth-child(even) {
+            background: rgba( 74, 74, 74, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body tr:nth-child(odd) {
+            background: rgba( 155, 155, 155, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body td {
+            padding: 1%;
+        }
+
+            #table_body td a {
+                width: 45%;
+            }
+
+    #form_deny {
+        width: 100%;
+    }
+
+        #form_deny button {
+            width: 50%;
+        }
+</style>

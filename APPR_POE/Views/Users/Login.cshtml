@@ -1,0 +1,103 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div id="div_login">
+    <centre>
+        <form id="form_login" method="post" asp-action="Login">
+            @*<center>
+                <object data="@Url.Content("~/login.svg")" width="200" height="200"> </object>
+            </center>*@
+            <label class="h1" style="width: 100%; text-align: center">Login</label>
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <center>
+                    <span class="text-danger" style="width: 100%; text-align: center;">
+                        @TempData["ErrorMessage"]
+                    </span>
+                </center>
+            }
+            else
+            {
+                <br />
+            }
+            <br />
+            <table>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="email" placeholder="Email" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input asp-for="password" type="password" placeholder="Password" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <button class="btn btn-primary" type="submit">LOGIN</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 33% !important;">
+                        <hr />
+                    </td>
+                    <td style="width: 33% !important;">
+                        OR
+                    </td>
+                    <td style="width: 33% !important;">
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <a asp-action="SignUp" class="btn btn-secondary">SIGN UP</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </centre>
+</div>
+
+<style>
+    #form_login {
+        width: 35%;
+        margin: auto;
+        margin-top: 5%;
+        padding: 5%;
+        color: white !important;
+    }
+
+    #form_login {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+        #form_login input {
+            width: 100%;
+            padding: 3%;
+        }
+
+        #form_login button, #form_login a {
+            width: 100%;
+        }
+
+        #form_login table {
+            width: 100%;
+            text-align: center;
+        }
+
+            #form_login table tr {
+                width: 100%;
+            }
+
+            #form_login table td {
+                padding-top: 5%;
+                width: 100%;
+            }
+</style>

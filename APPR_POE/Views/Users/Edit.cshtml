@@ -1,0 +1,149 @@
+﻿@model APPR_POE.Models.User
+
+@{
+    ViewData["Title"] = "Edit";
+
+    //Access Control - Admin & Account Owner Only
+    var _role = Accessor.HttpContext.Session.GetString("role");
+    var _email = Accessor.HttpContext.Session.GetString("email");
+
+    if (_role != "admin" && _email != Model.email)
+    {
+        Context.Response.Redirect("/Users/Details/" + _email.ToString());
+    }
+}
+
+<div id="div_Details">
+    <a asp-action="Details" asp-route-id="@Model.email" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i>
+        Back
+    </a>
+    <br />
+    <br />
+    <label class="h1">
+        Edit Details
+    </label>
+    <div id="div_tblDetails">
+        <form method="post" asp-action="Edit">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            Account Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>
+                                First Name
+                            </label>
+                            <br />
+                            <input asp-for="first_name" required/>
+                        </td>
+                        <td>
+                            <label>
+                                Last Name
+                            </label>
+                            <br />
+                            <input asp-for="last_name" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                Email (Cannot Change)
+                            </label>
+                            <br />
+                            <input asp-for="email" readonly />
+                        </td>
+                        <td>
+                            <label>
+                                Phone
+                            </label>
+                            <br />
+                            <input asp-for="phone" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td style="text-align: right !important;">
+                            <button class="btn btn-success" type="submit">
+                                <i class="bi bi-check-circle"></i>
+                                Save Details
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<style>
+    #div_Details {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_Details {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_Details {
+        width: 100%;
+    }
+
+        #div_Details table {
+            width: 100%;
+            margin: auto;
+            margin-top: 2%;
+            border-radius: 15px !important;
+            overflow: hidden !important;
+        }
+
+            #div_Details table thead {
+                color: white;
+                background-color: #6600FF;
+                font-weight: bold;
+            }
+
+                #div_Details table thead tr {
+                }
+
+                #div_Details table thead th {
+                    padding: 1%;
+                    padding-top: 2%;
+                    padding-bottom: 2%;
+                }
+
+            #div_Details table tbody {
+            }
+
+                #div_Details table tbody tr {
+                    background: rgba( 155, 155, 155, 0.3 );
+                    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+                    backdrop-filter: blur( 10px );
+                    -webkit-backdrop-filter: blur( 10px );
+                    border-radius: 10px;
+                    /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+                }
+
+                #div_Details table tbody td {
+                    padding: 1%;
+                }
+
+                    #div_Details table tbody td input {
+                        width: 100%;
+                        padding: 1%;
+                    }
+</style>

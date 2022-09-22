@@ -1,0 +1,515 @@
+﻿@model APPR_POE.Models.User
+
+@{
+    ViewData["Title"] = "Account Details";
+
+    var listGoods = (List<GoodsDonation>)ViewData["GoodsDonations"];
+    var listMoney = (List<MoneyDonation>)ViewData["MoneyDonations"];
+
+    //Access Control - Admin & Account Owner Only
+    var _role = Accessor.HttpContext.Session.GetString("role");
+    var _email = Accessor.HttpContext.Session.GetString("email");
+
+    if (_role != "admin" && _email != Model.email)
+    {
+        Context.Response.Redirect("/Users/Details/" + _email.ToString());
+    }
+}
+
+<div id="div_all">
+    <div id="div_Details">
+        <label class="h1">
+            Account: @Html.ValueFor(x => x.first_name) @Html.ValueFor(x => x.last_name)
+        </label>
+        <a style="float: right !important;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.email">
+            <i class="bi bi-pencil-square"></i>
+            Edit Details
+        </a>
+        <div id="div_tblDetails">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            Account Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>
+                                First Name
+                            </label>
+                            <br />
+                            <input type="text" value="@Model.first_name" readonly />
+                        </td>
+                        <td>
+                            <label>
+                                Last Name
+                            </label>
+                            <br />
+                            <input type="text" value="@Model.last_name" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>
+                                Email
+                            </label>
+                            <br />
+                            <input type="text" value="@Model.email" readonly />
+                        </td>
+                        <td>
+                            <label>
+                                Phone
+                            </label>
+                            <br />
+                            <input type="text" value="@Model.phone" readonly />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div id="div_MoneyDonos">
+        <label class="h1">
+            Money Donations
+        </label>
+        @if (Model.email == _email)
+        {
+            <a style="float: right; width: 20%;" class="btn btn-success" asp-controller="MoneyDonations" asp-action="Donate">
+                <i class="bi bi-gift"></i> Add Money Donation
+            </a>
+        }
+        <div id="div_top">
+            <table id="table_head">
+                <thead>
+                    <tr>
+                        <td style="width: 20%;">
+                            Date
+                        </td>
+                        <td style="width: 60%;">
+                            Donor
+                        </td>
+                        <td style="width: 20%;">
+                            Amount
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="div_bottom">
+            <table id="table_body">
+                <tbody>
+                    @foreach (var item in listMoney)
+                    {
+                        <tr>
+                            <td style="width: 20%;">
+                                <label>@item.date.ToShortDateString()</label>
+                            </td>
+                            <td style="width: 60%;">
+                                @if (item.anonymous == true)
+                                {
+                                    <label>Anonymous</label>
+                                }
+                                else
+                                {
+                                    <label>@item.email</label>
+                                }
+                            </td>
+                            <td style="width: 20%;">
+                                R @item.amount
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div id="div_GoodsDonos">
+        <label class="h1">
+            Goods Donations
+        </label>
+        @if (Model.email == _email)
+        {
+            <a style="float: right; width: 20%;" class="btn btn-success" asp-controller="GoodsDonations" asp-action="Donate">
+                <i class="bi bi-gift"></i> Add Goods Donation
+            </a>
+        }
+        <div id="div_top">
+            <table id="table_head">
+                <thead>
+                    <tr>
+                        <td style="width: 10%;">
+                            Date
+                        </td>
+                        <td style="width: 20%;">
+                            Donor
+                        </td>
+                        <td style="width: 8%;">
+                            Quantity
+                        </td>
+                        <td style="width: 22%;">
+                            Category
+                        </td>
+                        <td style="width: 40%;">
+                            Description
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="div_bottom">
+            <table id="table_body">
+                <tbody>
+                    @foreach (var item in listGoods)
+                    {
+                        <tr>
+                            <td style="width: 10%;">
+                                <label>@item.date.ToShortDateString()</label>
+                            </td>
+                            <td style="width: 20%;">
+                                @if (item.anonymous == true)
+                                {
+                                    <label>Anonymous</label>
+                                }
+                                else
+                                {
+                                    <label>@item.email</label>
+                                }
+                            </td>
+                            <td style="width: 8%;">
+                                @item.quantity
+                            </td>
+                            <td style="width: 22%;">
+                                @item.category
+                                @*<form method="post" asp-action="Details" asp-route-id="@item.id" id="form_details">
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-info-circle"></i> Details
+                                    </button>
+                                </form>*@
+                            </td>
+                            <td style="width: 40%;">
+                                @if (item.description.Length < 60)
+                                {
+                                    <label>
+                                        @item.description
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label>
+                                        @item.description.Substring(0, 56)
+                                        ...
+                                    </label>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        max-height: 75vh !important;
+        min-height: 75vh !important;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+</style>
+
+@*Details*@
+<style>
+    #div_Details {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_Details {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_Details {
+        width: 100%;
+    }
+
+        #div_Details table {
+            width: 100%;
+            margin: auto;
+            margin-top: 2%;
+            border-radius: 15px !important;
+            overflow: hidden !important;
+        }
+
+            #div_Details table thead {
+                color: white;
+                background-color: #6600FF;
+                font-weight: bold;
+            }
+
+                #div_Details table thead tr {
+                }
+
+                #div_Details table thead th {
+                    padding: 1%;
+                    padding-top: 2%;
+                    padding-bottom: 2%;
+                }
+
+            #div_Details table tbody {
+            }
+
+                #div_Details table tbody tr {
+                    background: rgba( 155, 155, 155, 0.3 );
+                    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+                    backdrop-filter: blur( 10px );
+                    -webkit-backdrop-filter: blur( 10px );
+                    border-radius: 10px;
+                    /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+                }
+
+                #div_Details table tbody td {
+                    padding: 1%;
+                }
+
+                    #div_Details table tbody td input {
+                        width: 100%;
+                        padding: 1%;
+                    }
+</style>
+
+@*Money Donations*@
+<style>
+    #div_MoneyDonos {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_MoneyDonos {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_top {
+        width: 100%;
+    }
+
+    #table_head {
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+        #table_head thead {
+            color: white;
+            background-color: #6600FF;
+            font-weight: bold;
+        }
+
+        #table_head tr {
+        }
+
+        #table_head td {
+            padding: 1%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+        }
+
+    #div_bottom {
+        width: 100%;
+        border-radius: 0px 0px 15px 15px !important;
+        max-height: 25vh !important;
+        min-height: 25vh !important;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #table_body {
+        width: 100%;
+    }
+
+        #table_body tbody {
+        }
+
+        #table_body tr:nth-child(even) {
+            background: rgba( 74, 74, 74, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body tr:nth-child(odd) {
+            background: rgba( 155, 155, 155, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body td {
+            padding: 1%;
+        }
+
+            #table_body td a {
+                width: 45%;
+            }
+
+    #form_details {
+        width: 100%;
+    }
+
+        #form_details button {
+            width: 50%;
+        }
+</style>
+
+@*Goods Donation*@
+<style>
+    #div_GoodsDonos {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_GoodsDonos {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_top {
+        width: 100%;
+    }
+
+    #table_nav {
+        width: 100%;
+        margin-bottom: 2%;
+    }
+
+    #table_nav {
+        background: rgba( 74, 74, 74, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 0px solid rgba( 255, 255, 255, 0.18 );
+        overflow: hidden !important;
+    }
+
+        #table_nav td {
+            width: 33%;
+            text-align: center;
+        }
+
+            #table_nav td a {
+                color: white;
+                text-decoration: none;
+                font-size: 20px;
+                display: block;
+                width: 100%;
+                padding: 2%;
+            }
+
+                #table_nav td a:hover {
+                    background: rgba( 102, 0, 255, 0.3 ) !important;
+                }
+
+        #table_nav .active {
+            background: rgba( 102, 0, 255, 0.7 ) !important;
+        }
+
+    #table_head {
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+        #table_head thead {
+            color: white;
+            background-color: #6600FF;
+            font-weight: bold;
+        }
+
+        #table_head tr {
+        }
+
+        #table_head td {
+            padding: 1%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+        }
+
+    #div_bottom {
+        width: 100%;
+        border-radius: 0px 0px 15px 15px !important;
+        max-height: 30vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #table_body {
+        width: 100%;
+    }
+
+        #table_body tbody {
+        }
+
+        #table_body tr:nth-child(even) {
+            background: rgba( 74, 74, 74, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body tr:nth-child(odd) {
+            background: rgba( 155, 155, 155, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body td {
+            padding: 1%;
+        }
+
+            #table_body td a {
+                width: 45%;
+            }
+
+    #form_details {
+        width: 100%;
+    }
+
+        #form_details button {
+            width: 50%;
+        }
+</style>

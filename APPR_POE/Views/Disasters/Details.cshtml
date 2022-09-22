@@ -1,0 +1,168 @@
+﻿@model APPR_POE.Models.Disaster
+
+@{
+    ViewData["Title"] = "Details";
+
+    var _role = Accessor.HttpContext.Session.GetString("role");
+    var _email = Accessor.HttpContext.Session.GetString("email");
+
+    var list = Model.aid_types.Split(",");
+}
+
+<div id="div_DisasterDetails">
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i>
+        Back
+    </a>
+    
+    @if (Model.created_by == _email || _role == "admin")
+    {
+        <a asp-action="Edit" asp-route-id="@Model.id" class="btn btn-primary" style="float: right;">
+            <i class="bi bi-pencil-square"></i>
+            Edit Disaster
+        </a>
+    }
+    <br />
+    <br />
+    <label class="h1">
+        Disaster Details
+    </label>
+    <table id="table_Dates">
+        <thead>
+            <tr>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Model.start_date.ToShortDateString()
+                </td>
+                <td>
+                    @Model.end_date.ToShortDateString()
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="table_Location">
+        <thead>
+            <tr>
+                <th style="width: 50%;">
+                    Location
+                </th>
+                <th>
+                    Created By
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 50%;">
+                    @Model.location
+                </td>
+                <td>
+                    @Model.created_by
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="table_Description" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50%;">
+                    Description
+                </th>
+                <th>
+                    Required Aids
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 50%; word-wrap: break-word; vertical-align: top;">
+                    @Model.description
+                </td>
+                <td style="word-wrap: break-word">
+                    <ul>
+                        @foreach (var item in list)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    #div_DisasterDetails {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_DisasterDetails {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_DisasterDetails {
+        width: 100%;
+    }
+
+        #div_DisasterDetails table {
+            width: 100%;
+            margin: auto;
+            margin-top: 2%;
+            border-radius: 15px !important;
+            overflow: hidden !important;
+        }
+
+            #div_DisasterDetails table thead {
+                color: white;
+                background-color: #6600FF;
+                font-weight: bold;
+            }
+
+                #div_DisasterDetails table thead tr {
+                }
+
+                #div_DisasterDetails table thead th {
+                    padding: 1%;
+                    padding-top: 2%;
+                    padding-bottom: 2%;
+                }
+
+            #div_DisasterDetails table tbody {
+            }
+
+                #div_DisasterDetails table tbody tr {
+                    background: rgba( 155, 155, 155, 0.3 );
+                    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+                    backdrop-filter: blur( 10px );
+                    -webkit-backdrop-filter: blur( 10px );
+                    border-radius: 10px;
+                    /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+                }
+
+                #div_DisasterDetails table tbody td {
+                    padding: 1%;
+                }
+
+                    #div_DisasterDetails table tbody td input {
+                        width: 100%;
+                        padding: 1%;
+                    }
+</style>

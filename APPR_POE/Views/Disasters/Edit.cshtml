@@ -1,0 +1,163 @@
+﻿@model APPR_POE.Models.Disaster
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div id="div_DisasterDetails">
+    <a asp-action="Details" asp-route-id="@Model.id" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i>
+        Back
+    </a>
+    <br />
+    <br />
+    <label class="h1">
+        Disaster Details
+    </label>
+    <form method="post" asp-action="Edit">
+        <table id="table_Dates">
+            <thead>
+                <tr>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input asp-for="start_date" />
+                    </td>
+                    <td>
+                        <input asp-for="end_date" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="table_Location">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">
+                        Location
+                    </th>
+                    <th>
+                        Created By
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 50%;">
+                        <input asp-for="location" />
+                    </td>
+                    <td>
+                        <input asp-for="created_by" readonly />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="table_Description" style="table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">
+                        Description
+                    </th>
+                    <th>
+                        Required Aids
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 50%; word-wrap: break-word; vertical-align: top;">
+                        <textarea asp-for="description"></textarea>
+                    </td>
+                    <td style="word-wrap: break-word; vertical-align: top;">
+                        <input asp-for="aid_types" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <div style="text-align: right; width: 100%;">
+            <button class="btn btn-success">
+                <i class="bi bi-check-circle"></i>
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    #div_DisasterDetails {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_DisasterDetails {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_DisasterDetails {
+        width: 100%;
+    }
+
+        #div_DisasterDetails table {
+            width: 100%;
+            margin: auto;
+            margin-top: 2%;
+            border-radius: 15px !important;
+            overflow: hidden !important;
+        }
+
+            #div_DisasterDetails table thead {
+                color: white;
+                background-color: #6600FF;
+                font-weight: bold;
+            }
+
+                #div_DisasterDetails table thead tr {
+                }
+
+                #div_DisasterDetails table thead th {
+                    padding: 1%;
+                    padding-top: 2%;
+                    padding-bottom: 2%;
+                }
+
+            #div_DisasterDetails table tbody {
+            }
+
+                #div_DisasterDetails table tbody tr {
+                    background: rgba( 155, 155, 155, 0.3 );
+                    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+                    backdrop-filter: blur( 10px );
+                    -webkit-backdrop-filter: blur( 10px );
+                    border-radius: 10px;
+                    /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+                }
+
+                #div_DisasterDetails table tbody td {
+                    padding: 1%;
+                }
+
+                    #div_DisasterDetails table tbody td input {
+                        width: 100%;
+                        padding: 1%;
+                    }
+
+                    #div_DisasterDetails table tbody td textarea {
+                        width: 100%;
+                        padding: 1%;
+                    }
+</style>

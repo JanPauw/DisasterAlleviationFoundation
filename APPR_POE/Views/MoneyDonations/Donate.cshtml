@@ -1,0 +1,184 @@
+﻿@model APPR_POE.Models.MoneyDonation
+
+@{
+    ViewData["Title"] = "Donate Money";
+    var sessionEmail = Accessor.HttpContext.Session.GetString("email");
+}
+
+<div id="div_DonateMoney">
+    <label class="h1" style="width: 100%; text-align: center">
+        Donate Money
+    </label>
+
+    <form method="post" id="form_DonateMoney" asp-action="Donate">
+        <table>
+            <tr>
+                <td colspan="2">
+                    <input asp-for="date" value="2022-01-01" hidden />
+
+                    <label>Amount in Rands</label>
+                    <br />
+                    <input asp-for="amount" placeholder="100" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input asp-for="email" value="@sessionEmail" readonly hidden />
+                    <br />
+                    <div class="anon">
+                        <table>
+                            <tr>
+                                <td style="width: 90%;">
+                                    Anonymous Donation
+                                </td>
+                                <td style="width: 10%; text-align: center">
+                                    <label class="toggler-wrapper style-1">
+                                        <input asp-for="anonymous" type="checkbox">
+                                        <div class="toggler-slider">
+                                            <div class="toggler-knob"></div>
+                                        </div>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" style="width: 50% !important;">
+                    <br />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-gift"></i> Donate
+                    </button>
+                </td>
+                <td colspan="1" style="width: 50% !important;">
+                    <br />
+                    <button asp-controller="Users" asp-action="Details" asp-route-id="@sessionEmail" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<style>
+    #div_DonateMoney {
+        width: 35%;
+        height: 100%;
+        margin: auto;
+        margin-top: 5%;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_DonateMoney {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #form_DonateMoney {
+        padding: 5%;
+        width: 100%;
+    }
+
+        #form_DonateMoney button, #form_DonateMoney a {
+            width: 100%;
+        }
+
+        #form_DonateMoney input {
+            width: 100%;
+            padding: 3%;
+        }
+
+        #form_DonateMoney table {
+            width: 100%;
+            border-collapse: collapse !important;
+        }
+
+            #form_DonateMoney table tr {
+                width: 100%;
+            }
+
+            #form_DonateMoney table td {
+                width: 100%;
+            }
+
+    .anon {
+        overflow: hidden !important;
+        background: rgba( 155, 155, 155, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    .anon {
+        padding: 3%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+</style>
+
+<style>
+
+    .toggler-wrapper {
+        display: block;
+        width: 45px;
+        height: 25px;
+        cursor: pointer;
+        position: relative;
+    }
+
+        .toggler-wrapper input[type="checkbox"] {
+            display: none;
+        }
+
+            .toggler-wrapper input[type="checkbox"]:checked + .toggler-slider {
+                background-color: #FF0074;
+            }
+
+        .toggler-wrapper .toggler-slider {
+            background-color: #ccc;
+            position: absolute;
+            border-radius: 100px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all 300ms ease;
+            transition: all 300ms ease;
+        }
+
+        .toggler-wrapper .toggler-knob {
+            position: absolute;
+            -webkit-transition: all 300ms ease;
+            transition: all 300ms ease;
+        }
+
+
+        /*--------------------------------------------------------------
+                    3.0 Effects Styles
+                    --------------------------------------------------------------*/
+
+
+        /*Style 1*/
+
+        .toggler-wrapper.style-1 input[type="checkbox"]:checked + .toggler-slider .toggler-knob {
+            left: calc(100% - 19px - 3px);
+        }
+
+        .toggler-wrapper.style-1 .toggler-knob {
+            width: calc(25px - 6px);
+            height: calc(25px - 6px);
+            border-radius: 50%;
+            left: 3px;
+            top: 3px;
+            background-color: #fff;
+        }
+</style>

@@ -1,0 +1,30 @@
+﻿@{
+    var _email = Accessor.HttpContext.Session.GetString("email");
+    var _password = Accessor.HttpContext.Session.GetString("password");
+    var _first_name = Accessor.HttpContext.Session.GetString("first_name");
+    var _last_name = Accessor.HttpContext.Session.GetString("last_name");
+    var _phone = Accessor.HttpContext.Session.GetString("phone");
+    var _role = Accessor.HttpContext.Session.GetString("role");
+
+    var logged_in = Accessor.HttpContext.Session.GetString("logged_in");
+
+    string URL = Accessor.HttpContext.Request.Path;
+    bool isLoginPage = URL == "/Users/Login";
+    bool isRegisterPage = URL == "/Users/SignUp";
+
+    if (logged_in == "true")
+    {
+        if (isRegisterPage || isLoginPage)
+        {
+            Context.Response.Redirect("/Users/Details/" + _email.ToString());
+        }
+    }
+
+    if (logged_in != "true")
+    {
+        if (!isRegisterPage && !isLoginPage)
+        {
+            Context.Response.Redirect("/Users/Login");
+        }
+    }
+}

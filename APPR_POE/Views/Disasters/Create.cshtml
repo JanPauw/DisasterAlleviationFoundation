@@ -1,0 +1,128 @@
+﻿@model APPR_POE.Models.Disaster
+
+@{
+    ViewData["Title"] = "Add Disaster";
+}
+
+<div id="div_AddDisaster">
+    <label class="h1" style="width: 100%; text-align: center">
+        Add Disaster
+    </label>
+
+    <form method="post" id="form_DonateGoods" asp-action="Create" autocomplete="off">
+        <table>
+            <tr>
+                <td colspan="2">
+                    <label>Start Date</label>
+                    <br />
+                    <input asp-for="start_date" required/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>End Date</label>
+                    <br />
+                    <input asp-for="end_date" required/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>Location</label>
+                    <br />
+                    <input type="text" asp-for="location" required/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>Description</label>
+                    <br />
+                    <textarea asp-for="description" required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>Required Aids (Seperate Aids with a Comma ",")</label>
+                    <br />
+                    <input asp-for="aid_types" required/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" style="width: 50% !important;">
+                    <br />
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-gift"></i> Donate
+                    </button>
+                </td>
+                <td colspan="1" style="width: 50% !important;">
+                    <br />
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<style>
+    #div_AddDisaster {
+        width: 35%;
+        height: 100%;
+        margin: auto;
+        margin-top: 5%;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_AddDisaster {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #form_DonateGoods {
+        padding: 5%;
+        width: 100%;
+    }
+
+        #form_DonateGoods button, #form_DonateGoods a {
+            width: 100%;
+        }
+
+        #form_DonateGoods input, #form_DonateGoods textarea {
+            width: 100%;
+            padding: 3%;
+        }
+
+        #form_DonateGoods table {
+            width: 100%;
+            border-collapse: collapse !important;
+        }
+
+            #form_DonateGoods table tr {
+                width: 100%;
+            }
+
+            #form_DonateGoods table td {
+                width: 100%;
+            }
+
+    .anon {
+        overflow: hidden !important;
+        background: rgba( 155, 155, 155, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    .anon {
+        padding: 3%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+</style>

@@ -22,9 +22,9 @@ namespace APPR_POE.Controllers
         // GET: MoneyDonations
         public async Task<IActionResult> Index()
         {
-              return _context.MoneyDonations != null ? 
-                          View(await _context.MoneyDonations.OrderByDescending(x => x.date).ToListAsync()) :
-                          Problem("Entity set 'Db_Context.MoneyDonations'  is null.");
+            return _context.MoneyDonations != null ?
+                        View(await _context.MoneyDonations.OrderByDescending(x => x.date).ToListAsync()) :
+                        Problem("Entity set 'Db_Context.MoneyDonations'  is null.");
         }
 
         // GET: MoneyDonations/Details/5
@@ -35,8 +35,7 @@ namespace APPR_POE.Controllers
                 return NotFound();
             }
 
-            var moneyDonation = await _context.MoneyDonations
-                .FirstOrDefaultAsync(m => m.id == id);
+            var moneyDonation = await _context.MoneyDonations.FirstOrDefaultAsync(m => m.id == id);
             if (moneyDonation == null)
             {
                 return NotFound();
@@ -62,9 +61,22 @@ namespace APPR_POE.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Set Money Donation Date
                 moneyDonation.date = DateTime.Now;
-                _context.Add(moneyDonation);
-                await _context.SaveChangesAsync();
+
+                MoneyStatement ms = new MoneyStatement();
+                ms.amount = moneyDonation.amount;
+                ms.date = moneyDonation.date;
+                ms.donor = moneyDonation.email;
+                ms.type = "donation";
+
+                //Add Objects to Database
+                _context.MoneyDonations.Add(moneyDonation);
+                _context.SaveChanges();
+
+                _context.MoneyStatements.Add(ms);
+                _context.SaveChanges();
+
                 return RedirectToAction("Details", "Users", new { id = moneyDonation.email });
             }
 
@@ -75,7 +87,7 @@ namespace APPR_POE.Controllers
 
         private bool MoneyDonationExists(int id)
         {
-          return (_context.MoneyDonations?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.MoneyDonations?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

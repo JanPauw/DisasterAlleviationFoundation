@@ -30,6 +30,9 @@ namespace APPR_POE.Controllers
         // GET: Disasters/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            List<GoodsInventory> outputList = _context.GoodsInventories.Distinct().ToList();
+            ViewData["Inventory"] = outputList;
+
             if (id == null || _context.Disasters == null)
             {
                 return NotFound();
@@ -41,6 +44,11 @@ namespace APPR_POE.Controllers
             {
                 return NotFound();
             }
+
+            //Money Total
+            double TotalReceived = _context.MoneyStatements.Where(x => x.type == "donation").Sum(x => x.amount);
+            double TotalAllocated = _context.MoneyStatements.Where(x => x.type == "allocate").Sum(x => x.amount);
+            ViewData["MoneyLeft"] = TotalReceived - TotalAllocated;
 
             return View(disaster);
         }
@@ -82,6 +90,109 @@ namespace APPR_POE.Controllers
             _context.Add(d);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateMoney(int disaster_id, double amount, string email)
+        {
+            var disaster = _context.Disasters.Find(disaster_id);
+            if (disaster == null)
+            {
+                TempData["error"] = "Invalid Disaster Chosen for Allocation!";
+                return RedirectToAction("Index");
+            }
+
+            //Money Total
+            double TotalReceived = _context.MoneyStatements.Where(x => x.type == "donation").Sum(x => x.amount);
+            double TotalAllocated = _context.MoneyStatements.Where(x => x.type == "allocate").Sum(x => x.amount);
+            var MoneyRemaining = TotalReceived - TotalAllocated;
+
+            if (amount > MoneyRemaining)
+            {
+                TempData["error"] = "Cannot allocate less than what remaining amount!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            var user = _context.Users.Find(email);
+            if (user == null)
+            {
+                TempData["error"] = "Invalid user trying to allocate!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            //MoneyStatement Record Creation
+            MoneyStatement ms = new MoneyStatement();
+            ms.amount = amount;
+            ms.date = DateTime.Now;
+            ms.donor = email;
+            ms.type = "allocate";
+
+            //MoneyAllocation Record Creation
+            MoneyAllocation ma = new MoneyAllocation();
+            ma.amount = ms.amount;
+            ma.date = ms.date;
+            ma.disaster_id = disaster_id;
+
+            _context.MoneyStatements.Add(ms);
+            _context.MoneyAllocations.Add(ma);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = disaster.id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateGoods(int disaster_id, string category, int quantity)
+        {
+            var disaster = _context.Disasters.Find(disaster_id);
+            if (disaster == null)
+            {
+                TempData["error"] = "Invalid Disaster Chosen for Allocation!";
+                return RedirectToAction("Index");
+            }
+
+            if (String.IsNullOrWhiteSpace(category))
+            {
+                TempData["error"] = "Invalid category chosen!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            if (quantity < 1)
+            {
+                TempData["error"] = "Quantity cannot be lower than 0!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            GoodsInventory gi = _context.GoodsInventories.Where(x => x.category == category).FirstOrDefault();
+            if (gi == null)
+            {
+                TempData["error"] = "Invalid category chosen!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            if (quantity > gi.quantity)
+            {
+                TempData["error"] = "Quantity cannot be more than available stock!";
+                return RedirectToAction("Details", new { id = disaster.id });
+            }
+
+            //Update GoodsInventory with new quantity
+            gi.quantity = gi.quantity - quantity;
+            _context.GoodsInventories.Update(gi);
+
+            //Add GoodsAllocation to DB
+            GoodsAllocation ga = new GoodsAllocation();
+            ga.date = DateTime.Now;
+            ga.quantity = quantity;
+            ga.category = category;
+            ga.disaster_id = disaster_id;
+
+            _context.GoodsAllocations.Add(ga);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = disaster_id });
         }
 
         // GET: Disasters/Edit/5

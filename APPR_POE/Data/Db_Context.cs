@@ -10,5 +10,9 @@ namespace APPR_POE.Data
         public DbSet<MoneyDonation> MoneyDonations { get; set; }
         public DbSet<GoodsDonation> GoodsDonations { get; set; }
         public DbSet<Disaster> Disasters { get; set; }
+        public DbSet<MoneyStatement> MoneyStatements { get; set; }
+        public DbSet<GoodsInventory> GoodsInventories { get; set; }
+        public DbSet<MoneyAllocation> MoneyAllocations { get; set; }
+        public DbSet<GoodsAllocation> GoodsAllocations { get; set; }
     }
 }

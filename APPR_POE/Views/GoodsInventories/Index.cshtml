@@ -1,0 +1,192 @@
+﻿@model IEnumerable<APPR_POE.Models.GoodsInventory>
+
+@{
+    ViewData["Title"] = "Goods Inventory";
+
+    var _role = Accessor.HttpContext.Session.GetString("role");
+    var _email = Accessor.HttpContext.Session.GetString("email");
+
+    var AvailableMoney = ViewBag.AvailableMoney;
+    List<String> GoodsCategories = ViewBag.GoodsCategories;
+}
+
+<div id="div_Goods">
+    <label class="h1">
+        Goods Inventory
+    </label>
+    <button class="btn btn-success" style="float: right;" data-bs-toggle="modal" data-bs-target="#BG_Modal">
+        <i class="bi bi-plus-circle"></i>
+        Buy Additional Goods
+    </button>
+    <div id="div_top">
+        <table id="table_head">
+            <thead>
+                <tr>
+                    <td style="width: 50%;">
+                        Goods Category
+                    </td>
+                    <td style="width: 50%;">
+                        Goods Quantity
+                    </td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="div_bottom">
+        <table id="table_body">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="width: 50%;">
+                            <label>@item.category</label>
+                        </td>
+                        <td style="width: 50%;">
+                            <label>@item.quantity</label>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="BG_Modal" tabindex="-1" aria-labelledby="BuyGoods" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AH_Label">Buy Additional Goods</h4>
+                <button style="background-color: white;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-action="Create">
+                <div class="modal-body">
+                    <label class="h5">Total Available Money: R @AvailableMoney</label>
+                    <hr />
+                    <label class="h5">Goods Details</label>
+                    <br />
+                    <label>Goods Category</label>
+                    <input class="form-control" name="category" type="text" list="DataListCategories" required />
+                    <datalist id="DataListCategories">
+                        @foreach (var item in GoodsCategories)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </datalist>
+                    <label>Goods Quantity</label>
+                    <input class="form-control" name="quantity" type="number" required />
+                    <label>Price per Item in Rands (R)</label>
+                    <input class="form-control" name="price" type="number" required />
+                    <input name="email" value="@_email" hidden />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Buy Goods</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    #div_Goods {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_Goods {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_top {
+        width: 100%;
+    }
+
+    #table_head {
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+        #table_head thead {
+            color: white;
+            background-color: #6600FF;
+            font-weight: bold;
+        }
+
+        #table_head tr {
+        }
+
+        #table_head td {
+            padding: 1%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+        }
+
+    #div_bottom {
+        width: 100%;
+        border-radius: 0px 0px 15px 15px !important;
+        max-height: 55vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #table_body {
+        width: 100%;
+    }
+
+        #table_body tbody {
+        }
+
+        #table_body tr:nth-child(even) {
+            background: rgba( 74, 74, 74, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body tr:nth-child(odd) {
+            background: rgba( 155, 155, 155, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body td {
+            padding: 1%;
+        }
+
+            #table_body td a {
+                width: 45%;
+            }
+
+    #form_details {
+        width: 100%;
+    }
+
+        #form_details button {
+            width: 50%;
+        }
+</style>
+
+<style>
+    .modal-content {
+        background: rgba( 102, 0, 255, 0.75 ) !important;
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+        backdrop-filter: blur( 4px ) !important;
+        -webkit-backdrop-filter: blur( 4px ) !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
+        color: white;
+    }
+</style>

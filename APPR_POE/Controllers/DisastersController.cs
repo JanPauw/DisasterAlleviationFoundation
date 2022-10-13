@@ -45,10 +45,15 @@ namespace APPR_POE.Controllers
                 return NotFound();
             }
 
+            //Total Money Allocated.
+            double TotalAllocated = _context.MoneyStatements.Where(x => x.type == "allocate").Sum(x => x.amount);
+            //Total money spent on acquiring goods
+            double TotalSpent = _context.MoneyStatements.Where(x => x.type == "acquired-goods").Sum(x => x.amount);
             //Money Total
             double TotalReceived = _context.MoneyStatements.Where(x => x.type == "donation").Sum(x => x.amount);
-            double TotalAllocated = _context.MoneyStatements.Where(x => x.type == "allocate").Sum(x => x.amount);
-            ViewData["MoneyLeft"] = TotalReceived - TotalAllocated;
+            ViewData["MoneyLeft"] = TotalReceived - TotalAllocated - TotalSpent;
+            ViewData["D_MoneyAllocated"] = _context.MoneyAllocations.Where(x => x.disaster_id == disaster.id).Sum(x => x.amount);
+            ViewData["D_GoodsAllocated"] = _context.GoodsAllocations.Where(x => x.disaster_id == disaster.id).OrderByDescending(x => x.date).ToList();
 
             return View(disaster);
         }
@@ -106,7 +111,8 @@ namespace APPR_POE.Controllers
             //Money Total
             double TotalReceived = _context.MoneyStatements.Where(x => x.type == "donation").Sum(x => x.amount);
             double TotalAllocated = _context.MoneyStatements.Where(x => x.type == "allocate").Sum(x => x.amount);
-            var MoneyRemaining = TotalReceived - TotalAllocated;
+            double TotalSpent = _context.MoneyStatements.Where(x => x.type == "acquired-goods").Sum(x => x.amount);
+            var MoneyRemaining = TotalReceived - TotalAllocated - TotalSpent;
 
             if (amount > MoneyRemaining)
             {

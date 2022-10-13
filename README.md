@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Purchase goods using money received from donations.
 
 ### Changed
-- Now using modals instead of full pages that conatin only one form for one purpose.
+- Now using modals instead of full pages that contain only one form for one purpose.
 - Incorrect button labels.
 - Update README.md to reflect changes made to the application.
 

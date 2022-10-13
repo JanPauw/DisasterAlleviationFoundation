@@ -73,23 +73,54 @@ namespace APPR_POE.Controllers
         {
             Disaster d = new Disaster();
 
-            if (start_date != null && end_date != null)
+            #region Input Validation
+            //Start Date
+            try
             {
                 d.start_date = (DateTime)start_date;
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Invalid Start Date Selected!";
+                return RedirectToAction("Index");
+            }
+
+            //End Date
+            try
+            {
                 d.end_date = (DateTime)end_date;
             }
-
-            if (location != null && description != null)
+            catch (Exception)
             {
-                d.location = location;
-                d.description = description;
+                TempData["error"] = "Invalid End Date Selected!";
+                return RedirectToAction("Index");
             }
 
-            if (aid_types != null)
+            //Location
+            if (String.IsNullOrEmpty(location))
             {
-                d.aid_types = aid_types;
+                TempData["error"] = "Invalid location entered!";
+                return RedirectToAction("Index");
             }
 
+            //Description
+            if (String.IsNullOrEmpty(description))
+            {
+                TempData["error"] = "Invalid description entered!";
+                return RedirectToAction("Index");
+            }
+
+            //Aid Types
+            if (String.IsNullOrEmpty(aid_types))
+            {
+                TempData["error"] = "Invalid aid types added!";
+                return RedirectToAction("Index");
+            }
+            #endregion
+
+            d.location = location;
+            d.description = description;
+            d.aid_types = aid_types;
             d.created_by = HttpContext.Session.GetString("email");
 
             _context.Add(d);

@@ -8,10 +8,10 @@
     <label class="h1">
         Disasters
     </label>
-    <a asp-action="Create" class="btn btn-success" style="float: right;">
+    <button class="btn btn-success" style="float: right;" data-bs-toggle="modal" data-bs-target="#AD_Modal">
         <i class="bi bi-plus-circle"></i>
         Add Disaster
-    </a>
+    </button>
     <div id="div_top">
         <table id="table_head">
             <thead>
@@ -93,6 +93,71 @@
                 }
             </tbody>
         </table>
+    </div>
+</div>
+
+@*Modal Add Disaster*@
+<div class="modal fade" id="AD_Modal" tabindex="-1" aria-labelledby="AllocateMoney" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="div_AddDisaster">
+            <label class="h1" style="width: 100%; text-align: center">
+                Add Disaster
+            </label>
+
+            <form method="post" id="form_AddDisaster" asp-action="Create" autocomplete="off">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <label>Start Date</label>
+                            <br />
+                            <input type="date" name="start_date" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>End Date</label>
+                            <br />
+                            <input type="date" name="end_date" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>Location</label>
+                            <br />
+                            <input type="text" name="location" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>Description</label>
+                            <br />
+                            <textarea name="description" required></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>Required Aids (Seperate Aids with a Comma ",")</label>
+                            <br />
+                            <input name="aid_types" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" style="width: 50% !important;">
+                            <br />
+                            <button type="submit" class="btn btn-success">
+                                Add Disaster
+                            </button>
+                        </td>
+                        <td colspan="1" style="width: 50% !important;">
+                            <br />
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -186,4 +251,77 @@
         #form_details button {
             width: 50%;
         }
+</style>
+
+@*Add Disaster Modal Styling*@
+<style>
+    .modal-content {
+        background: rgba( 102, 0, 255, 0.75 ) !important;
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+        backdrop-filter: blur( 4px ) !important;
+        -webkit-backdrop-filter: blur( 4px ) !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
+        color: white;
+    }
+
+    #div_AddDisaster {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        margin-top: 5%;
+        padding: 2%;
+    }
+
+    #div_AddDisaster {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #form_AddDisaster {
+        padding: 5%;
+        width: 100%;
+    }
+
+        #form_AddDisaster button, #form_AddDisaster a {
+            width: 100%;
+        }
+
+        #form_AddDisaster input, #form_AddDisaster textarea {
+            width: 100%;
+            padding: 3%;
+        }
+
+        #form_AddDisaster table {
+            width: 100%;
+            border-collapse: collapse !important;
+        }
+
+            #form_AddDisaster table tr {
+                width: 100%;
+            }
+
+            #form_AddDisaster table td {
+                width: 100%;
+            }
+
+    .anon {
+        overflow: hidden !important;
+        background: rgba( 155, 155, 155, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    .anon {
+        padding: 3%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
 </style>

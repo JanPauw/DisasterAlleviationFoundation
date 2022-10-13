@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
     - View all goods (Donated or Acquired), and the stock/quantity.
 
 ### Changed
-- Now using modals instead of full pages that conatin only one form for one purpose.
+- Now using modals instead of full pages that contain only one form for one purpose.
 - Incorrect button labels.
 - Readme.md:
     - Updated to reflect notable changes to the application.

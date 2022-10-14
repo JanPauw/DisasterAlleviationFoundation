@@ -60,8 +60,8 @@ namespace APPR_POE.Controllers
             var gi = _context.GoodsInventories.Where(x => x.category == category).FirstOrDefault();
             if (gi == null)
             {
-                TempData["error"] = "Invalid Category Chosen!";
-                return RedirectToAction("Index");
+                gi = new GoodsInventory();
+                gi.category = category;
             }
 
             //Check valid Quantity

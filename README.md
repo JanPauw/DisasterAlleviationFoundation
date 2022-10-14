@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Now using modals instead of full pages that contain only one form for one purpose.
 - Incorrect button labels.
+- Improved Form Validation to check for more cases.
 - Readme.md:
     - Updated to reflect notable changes to the application.
 

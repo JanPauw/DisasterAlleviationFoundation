@@ -48,7 +48,7 @@ namespace APPR_POE.Controllers
         // GET: GoodsDonations/Create
         public IActionResult Donate()
         {
-            var outputList = _context.GoodsDonations.Select(x => x.category).Distinct().ToList();
+            var outputList = _context.GoodsInventories.Select(x => x.category).Distinct().ToList();
             ViewData["Categories"] = outputList;            
 
             return View();

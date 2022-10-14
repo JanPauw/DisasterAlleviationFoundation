@@ -48,7 +48,7 @@ namespace APPR_POE.Controllers
         // GET: GoodsDonations/Create
         public IActionResult Donate()
         {
-            var outputList = _context.GoodsDonations.Select(x => x.category).Distinct().ToList();
+            var outputList = _context.GoodsInventories.Select(x => x.category).Distinct().ToList();
             ViewData["Categories"] = outputList;            
 
             return View();
@@ -64,6 +64,22 @@ namespace APPR_POE.Controllers
             if (ModelState.IsValid)
             {
                 goodsDonation.date = DateTime.Now;
+
+                //Add Goods to Inventory
+                GoodsInventory gi = _context.GoodsInventories.Where(x => x.category == goodsDonation.category).FirstOrDefault();
+                if (gi == null)
+                {
+                    gi = new GoodsInventory();
+                    gi.category = goodsDonation.category;
+                    gi.quantity = goodsDonation.quantity;
+                    _context.GoodsInventories.Add(gi);  
+                }
+                else
+                {
+                    gi.quantity = gi.quantity + goodsDonation.quantity;
+                    _context.GoodsInventories.Update(gi);
+                }
+
                 _context.Add(goodsDonation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", "Users", new { id = goodsDonation.email });

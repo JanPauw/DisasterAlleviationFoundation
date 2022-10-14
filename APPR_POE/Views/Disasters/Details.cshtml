@@ -7,6 +7,11 @@
     var _email = Accessor.HttpContext.Session.GetString("email");
 
     var list = Model.aid_types.Split(",");
+
+    double MoneyRemaining = ViewBag.MoneyLeft;
+    double MoneyAllocated = ViewBag.D_MoneyAllocated;
+    List<GoodsAllocation> GoodsAllocated = ViewBag.D_GoodsAllocated;
+    List<GoodsInventory> categories = ViewBag.Inventory;
 }
 
 <div id="div_DisasterDetails">
@@ -14,7 +19,7 @@
         <i class="bi bi-arrow-left-circle"></i>
         Back
     </a>
-    
+
     @if (Model.created_by == _email || _role == "admin")
     {
         <a asp-action="Edit" asp-route-id="@Model.id" class="btn btn-primary" style="float: right;">
@@ -27,6 +32,19 @@
     <label class="h1">
         Disaster Details
     </label>
+    @if (_role == "admin")
+    {
+        <button id="AllocateHistory" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#AH_Modal">
+            <i class="bi bi-clock-history"></i> Allocation History
+        </button>
+        <button id="AllocateGoods" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AG_Modal">
+            <i class="bi bi-box-seam"></i> Allocate Goods
+        </button>
+        <button id="AllocateMoney" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#AM_Modal">
+            <i class="bi bi-cash-coin"></i> Allocate Money
+        </button>
+    }
+
     <table id="table_Dates">
         <thead>
             <tr>
@@ -101,7 +119,110 @@
     </table>
 </div>
 
+<div class="modal fade" id="AM_Modal" tabindex="-1" aria-labelledby="AllocateMoney" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AM_Label">Allocate Money: R @MoneyRemaining remaining</h4>
+                <button style="background-color: white;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="form_DonateMoney" asp-action="AllocateMoney">
+                <div class="modal-body">
+                    <label>Allocation Amount in Rands (R)</label>
+                    <input class="form-control" name="amount" type="number" placeholder="eg. 100" required />
+                    <input name="email" value="@_email" hidden />
+                    <input name="disaster_id" value="@Model.id" hidden />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Allocate Money</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AG_Modal" tabindex="-1" aria-labelledby="AllocateGoods" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AG_Label">Allocate Goods:</h4>
+                <button style="background-color: white;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="form_DonateMoney" asp-action="AllocateGoods">
+                <div class="modal-body">
+                    <label>Category</label>
+                    <select name="category" class="form-select">
+                        @foreach (var item in categories)
+                        {
+                            <option value="@item.category" label="@item.category | @item.quantity left" />
+                        }
+                    </select>
+                    <br />
+                    <label>Quantity</label>
+                    <input class="form-control" name="quantity" type="number" required />
+                    <input name="disaster_id" value="@Model.id" hidden />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Allocate Goods</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AH_Modal" tabindex="-1" aria-labelledby="AllocateHistory" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="AH_Label">Allocation History:</h4>
+                <button style="background-color: white;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label class="h5">Total Money Allocated: R @MoneyAllocated</label>
+                <hr />
+                <label class="h5">Goods Allocated</label>
+                <table id="tblGoodsAllocated">
+                    <tr>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                    </tr>
+                    @foreach (var item in GoodsAllocated)
+                    {
+                        <tr>
+                            <td>
+                                @item.date.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.category
+                            </td>
+                            <td>
+                                @item.quantity
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
+    #AllocateMoney, #AllocateGoods, #AllocateHistory {
+        float: right !important;
+        margin-right: 5px;
+    }
+
     #div_DisasterDetails {
         height: 100%;
         margin: auto;
@@ -165,4 +286,21 @@
                         width: 100%;
                         padding: 1%;
                     }
+
+    #tblGoodsAllocated, #tblGoodsAllocated table {
+        width: 100%;
+    }
+</style>
+
+@*Allocate Money Styling*@
+<style>
+    .modal-content {
+        background: rgba( 102, 0, 255, 0.75 ) !important;
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) !important;
+        backdrop-filter: blur( 4px ) !important;
+        -webkit-backdrop-filter: blur( 4px ) !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba( 255, 255, 255, 0.18 ) !important;
+        color: white;
+    }
 </style>

@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Pages that are no longer in need because of modal changes.
 
-## [Part_1] - 2022-09-22
+## [Part_1] - 2022-09-14
 ### Added
 - Login and Registration.
 - Logout.

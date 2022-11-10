@@ -20,14 +20,51 @@ namespace APPR_POE.Controllers
         public async Task<IActionResult> Index()
         {
             var AllDisasters = await _context.Disasters.ToListAsync();
+            var SumOfGoodsDonations = await _context.GoodsDonations.SumAsync(x => x.quantity);
+            double TotalReceived = await _context.MoneyStatements.Where(x => x.type == "donation").SumAsync(x => x.amount);
+
+            List<Allocation> allocations = await GetAllocations();
+
+            ViewBag.Allocations = allocations;
+            ViewBag.ListDisasters = AllDisasters;
+            ViewBag.SumOfGoodsDonations = SumOfGoodsDonations;
+            ViewBag.TotalMoneyReceived = TotalReceived;
+
+            return View();
+        }
+
+        public async Task<List<Allocation>> GetAllocations()
+        {
+            List<Allocation> toReturn = new List<Allocation>();
+
             var AllMoneyAllocations = await _context.MoneyAllocations.ToListAsync();
             var AllGoodsAllocations = await _context.GoodsAllocations.ToListAsync();
 
-            ViewBag.ListDisasters = AllDisasters;
-            ViewBag.ListMoneyAllocations = AllMoneyAllocations;
-            ViewBag.ListGoodsAllocations = AllGoodsAllocations;
+            foreach (var item in AllMoneyAllocations)
+            {
+                Allocation allocation = new Allocation();
 
-            return View();
+                allocation.date = item.date;
+                allocation.disaster = item.disaster_id;
+                allocation.amount = item.amount;
+                allocation.type = "money";
+
+                toReturn.Add(allocation);
+            }
+
+            foreach (var item in AllGoodsAllocations)
+            {
+                Allocation allocation = new Allocation();
+
+                allocation.date = item.date;
+                allocation.disaster = item.disaster_id;
+                allocation.amount = item.quantity;
+                allocation.type = "good";
+
+                toReturn.Add(allocation);
+            }
+
+            return toReturn;
         }
 
         public IActionResult Privacy()

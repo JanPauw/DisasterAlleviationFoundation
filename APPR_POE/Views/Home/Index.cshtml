@@ -2,10 +2,13 @@
     ViewData["Title"] = "Home";
 
     List<Disaster> disasters = ViewBag.ListDisasters;
-    List<MoneyAllocation> moneyAllocations = ViewBag.ListMoneyAllocations;
-    List<GoodsAllocation> goodsAllocations = ViewBag.ListGoodsAllocations;
+    List<Allocation> allocations = ViewBag.Allocations;
+
+    double TotalGoodsDonations = ViewBag.SumOfGoodsDonations;
+    double TotalMoneyReceived = ViewBag.TotalMoneyReceived;
 
     disasters = disasters.OrderByDescending(x => x.start_date).ToList();
+    allocations = allocations.OrderByDescending(x => x.date).ToList();
 }
 
 <div id="div_MoneyDonos">
@@ -20,7 +23,7 @@
                         <a class="active">Total Money Received:</a>
                     </td>
                     <td>
-                        <label>R 10000</label>
+                        <label>R @TotalMoneyReceived</label>
                     </td>
                 </tr>
             </table>
@@ -32,7 +35,7 @@
                         <a class="active">Total Goods Received:</a>
                     </td>
                     <td>
-                        <label>100</label>
+                        <label>@TotalGoodsDonations</label>
                     </td>
                 </tr>
             </table>
@@ -88,21 +91,52 @@
             <table id="table_body">
                 <thead>
                     <tr>
-                        <td style="width: 100%;">
-                            Location
+                        <td style="width: 100%; background-color: #6600FF;">
+                            <label style="font-size: 16px; font-weight: bold;">Allocations</label>
                         </td>
                     </tr>
                 </thead>
             </table>
+
         </div>
         <div id="div_bottom">
-            
+            <table id="table_body">
+                <thead>
+                    @foreach (var allocation in allocations.Where(x => x.disaster == disaster.id))
+                    {
+                        <tr>
+                            <td style="width: 33%;">
+                                @allocation.date.ToShortDateString()
+                            </td>
+                            <td style="width: 33%;">
+                                @if (allocation.type.Equals("money"))
+                                {
+                                    <label>Money Donation</label>
+                                }
+                                @if (allocation.type.Equals("good"))
+                                {
+                                    <label>Goods Donation</label>
+                                }
+                            </td>
+                            <td style="width: 33%;">
+                                @if (allocation.type.Equals("money"))
+                                {
+                                    <label>R @allocation.amount</label>
+                                }
+                                @if (allocation.type.Equals("good"))
+                                {
+                                    <label>@allocation.amount</label>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </thead>
+            </table>
         </div>
-
         <br />
     }
 
-    
+
 </div>
 
 <style>

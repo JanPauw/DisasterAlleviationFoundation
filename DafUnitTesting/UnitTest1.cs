@@ -1,9 +1,10 @@
+using APPR_POE.Controllers;
 using APPR_POE.Data;
 using APPR_POE.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DafUnitTesting
+namespace DafXUnitTesting
 {
     public class UnitTest1 : IDisposable
     {
@@ -21,18 +22,56 @@ namespace DafUnitTesting
                 .Options;
 
             _context = new Db_Context(options);
+            _context.Database.EnsureCreated();
+        }
 
-            //Add Test Data
-            User u = new User();
-            u.first_name = "Jan";
-            u.last_name = "Pauw";
-            u.phone = "0716108740";
-            u.email = "pauwcoetzee@gmail.com";
-            u.password = "TestPassword";
-            u.role = "Admin";
+        [Fact]
+        public async Task GetDisasters_ReturnsCorrectType()
+        {
+            var disasters = await _context.Disasters.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<Disaster>>(disasters);
+        }
 
-            _context.Users.Add(u);
-            _context.SaveChanges();
+        [Fact]
+        public async Task GetGoodsAllocations_ReturnsCorrectType()
+        {
+            var goodsAllocations = await _context.GoodsAllocations.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<GoodsAllocation>>(goodsAllocations);
+        }
+
+        [Fact]
+        public async Task GetGoodsDonations_ReturnsCorrectType()
+        {
+            var goodsDonations = await _context.GoodsDonations.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<GoodsDonation>>(goodsDonations);
+        }
+
+        [Fact]
+        public async Task GetGoodsInventories_ReturnsCorrectType()
+        {
+            var goodsInventories = await _context.GoodsInventories.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<GoodsInventory>>(goodsInventories);
+        }
+
+        [Fact]
+        public async Task GetMoneyAllocations_ReturnsCorrectType()
+        {
+            var moneyAllocations = await _context.MoneyAllocations.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<MoneyAllocation>>(moneyAllocations);
+        }
+
+        [Fact]
+        public async Task GetMoneyDonations_ReturnsCorrectType()
+        {
+            var moneyDonations = await _context.MoneyDonations.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<MoneyDonation>>(moneyDonations);
+        }
+
+        [Fact]
+        public async Task GetMoneyStatements_ReturnsCorrectType()
+        {
+            var moneyStatements = await _context.MoneyStatements.ToListAsync();
+            var model = Assert.IsAssignableFrom<IEnumerable<MoneyStatement>>(moneyStatements);
         }
 
         [Fact]

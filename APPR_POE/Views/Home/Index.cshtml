@@ -1,8 +1,235 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+
+    List<Disaster> disasters = ViewBag.ListDisasters;
+    List<MoneyAllocation> moneyAllocations = ViewBag.ListMoneyAllocations;
+    List<GoodsAllocation> goodsAllocations = ViewBag.ListGoodsAllocations;
+
+    disasters = disasters.OrderByDescending(x => x.start_date).ToList();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div id="div_MoneyDonos">
+    <label class="h1">
+        Donations
+    </label>
+    <div id="div_top">
+        <center>
+            <table id="table_nav">
+                <tr>
+                    <td>
+                        <a class="active">Total Money Received:</a>
+                    </td>
+                    <td>
+                        <label>R 10000</label>
+                    </td>
+                </tr>
+            </table>
+        </center>
+        <center>
+            <table id="table_nav">
+                <tr>
+                    <td>
+                        <a class="active">Total Goods Received:</a>
+                    </td>
+                    <td>
+                        <label>100</label>
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </div>
+
+    <label class="h1">Disasters</label>
+    <br />
+    @foreach (var disaster in disasters)
+    {
+        <div id="div_top">
+            <table id="table_head">
+                <thead>
+                    <label class="h2">
+                        @disaster.start_date.ToShortDateString().ToUpper() - @disaster.end_date.ToShortDateString().ToUpper()
+                    </label>
+                    <tr>
+                        <td style="width: 20%;">
+                            Location
+                        </td>
+                        <td style="width: 40%;">
+                            Description
+                        </td>
+                        <td style="width: 40%;">
+                            Required Aids
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <table id="table_body">
+                <tbody>
+                    <tr>
+                        <td style="width: 20%;">
+                            @disaster.location
+                        </td>
+                        <td style="width: 40%;">
+                            @if (disaster.description.Length > 60)
+                            {
+                                var text = disaster.description.Substring(0, 60) + "...";
+                                @text
+                            }
+                            else
+                            {
+                                @disaster.description
+                            }
+                        </td>
+                        <td style="width: 40%;">
+                            @disaster.aid_types
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table_body">
+                <thead>
+                    <tr>
+                        <td style="width: 100%;">
+                            Location
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="div_bottom">
+            
+        </div>
+
+        <br />
+    }
+
+    
 </div>
+
+<style>
+    #div_MoneyDonos {
+        height: 100%;
+        margin: auto;
+        padding: 2%;
+        color: white;
+    }
+
+    #div_MoneyDonos {
+        background: rgba( 0, 0, 0, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+    }
+
+    #div_top {
+        width: 100%;
+    }
+
+    #table_nav {
+        width: 100%;
+        margin-bottom: 2%;
+    }
+
+    #table_nav {
+        background: rgba( 74, 74, 74, 0.3 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 10px );
+        -webkit-backdrop-filter: blur( 10px );
+        border-radius: 10px;
+        border: 0px solid rgba( 255, 255, 255, 0.18 );
+        overflow: hidden !important;
+    }
+
+        #table_nav label {
+            font-size: 30px;
+        }
+
+        #table_nav td {
+            width: 33%;
+            text-align: center;
+        }
+
+            #table_nav td a {
+                color: white;
+                text-decoration: none;
+                font-size: 20px;
+                display: block;
+                width: 100%;
+                padding: 2%;
+            }
+
+        #table_nav .active {
+            background: rgba( 102, 0, 255, 0.7 ) !important;
+        }
+
+    #table_head {
+        width: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+        #table_head thead {
+            color: white;
+            background-color: #6600FF;
+            font-weight: bold;
+        }
+
+        #table_head tr {
+        }
+
+        #table_head td {
+            padding: 1%;
+            padding-top: 2%;
+            padding-bottom: 2%;
+        }
+
+    #div_bottom {
+        width: 100%;
+        border-radius: 0px 0px 15px 15px !important;
+        max-height: 55vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #table_body {
+        width: 100%;
+    }
+
+        #table_body tbody {
+        }
+
+        #table_body tr:nth-child(even) {
+            background: rgba( 74, 74, 74, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body tr:nth-child(odd) {
+            background: rgba( 155, 155, 155, 0.3 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            /*border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+        }
+
+        #table_body td {
+            padding: 1%;
+        }
+
+            #table_body td a {
+                width: 45%;
+            }
+
+    #form_details {
+        width: 100%;
+    }
+
+        #form_details button {
+            width: 50%;
+        }
+</style>

@@ -40,6 +40,9 @@
                     <div class="collapse navbar-collapse" id="navbarColor01">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" asp-controller="Disasters" asp-action="Index">Disasters</a>
                             </li>
                             <li class="nav-item">
@@ -75,6 +78,24 @@
                     <input class="form-control me-sm-2" type="text" placeholder="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
                     </form>*@
+                    </div>
+                }
+                else
+                {
+                    <div class="collapse navbar-collapse" id="navbarColor01">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary" asp-controller="Users" asp-action="Login">
+                            LOGIN
+                        </a>
+                        <a class="btn btn-secondary" asp-controller="Users" asp-action="SignUp">
+                            SIGN UP
+                        </a>
                     </div>
                 }
 

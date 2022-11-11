@@ -28,9 +28,7 @@ namespace APPR_POE.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(string? email, string? password)
+        public bool ValidLogin(string email, string password)
         {
             //Encryption Object for password
             Encrypt enc = new Encrypt();
@@ -38,8 +36,8 @@ namespace APPR_POE.Controllers
             //Check if inputs are not empty
             if (String.IsNullOrWhiteSpace(email) || String.IsNullOrWhiteSpace(password))
             {
-                TempData["error"] = "Fields cannot be empty!";
-                return View();
+                //TempData["error"] = "Fields cannot be empty!";
+                return false;
             }
 
             //encrypt input password for checking
@@ -52,38 +50,43 @@ namespace APPR_POE.Controllers
             //check if user is found
             if (objUser == null)
             {
-                TempData["error"] = "Email is not registered! Please sign up.";
-                return View();
+                //TempData["error"] = "Email is not registered! Please sign up.";
+                return false;
             }
 
             //check if email matches
             if (objUser.email != email)
             {
-                TempData["error"] = "Invalid Login Credentials!";
-                return View();
+                //TempData["error"] = "Invalid Login Credentials!";
+                return false;
             }
 
             //check if password matches
             if (objUser.password != password)
             {
-                TempData["error"] = "Invalid Login Credentials!";
-                return View();
+                //TempData["error"] = "Invalid Login Credentials!";
+                return false;
             }
 
             //check if user is still pending
             if (objUser.role == "pending")
             {
-                TempData["error"] = "Your account is still pending authorization!";
-                return View();
+                //TempData["error"] = "Your account is still pending authorization!";
+                return false;
             }
 
             //check if user is denied access
             if (objUser.role == "denied")
             {
-                TempData["error"] = "Your account has been denied access!";
-                return View();
+                //TempData["error"] = "Your account has been denied access!";
+                return false;
             }
 
+            return true;
+        }
+
+        public void SetUserSessions(User objUser)
+        {
             HttpContext.Session.SetString("email", objUser.email);
             HttpContext.Session.SetString("password", objUser.password);
             HttpContext.Session.SetString("first_name", objUser.first_name);
@@ -91,10 +94,29 @@ namespace APPR_POE.Controllers
             HttpContext.Session.SetString("phone", objUser.phone);
             HttpContext.Session.SetString("role", objUser.role);
             HttpContext.Session.SetString("logged_in", "true");
+        }
 
-            TempData["success"] = "You are now logged in!";
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string? email, string? password)
+        {
+            if (!String.IsNullOrWhiteSpace(email) && !String.IsNullOrWhiteSpace(password))
+            {
+                if (ValidLogin(email, password))
+                {
+                    TempData["success"] = "You are now logged in!";
 
-            return RedirectToAction("Details", new { id = objUser.email });
+                    User u = _context.Users.Find(email);
+
+                    SetUserSessions(u);
+
+                    var UserID = HttpContext.Session.GetString("email");
+
+                    return RedirectToAction("Details", new { id = UserID });
+                }
+            }
+
+            return View();
         }
 
         public IActionResult Logout()
@@ -111,12 +133,69 @@ namespace APPR_POE.Controllers
             return View();
         }
 
+        public bool ValidRegistration(string first_name, string last_name, string phone, 
+            string email, string password, string confirm)
+        {
+            #region Check phone number
+            if (phone.Length != 10)
+            {
+                //TempData["error"] = "Invalid Phone Number!";
+                return false;
+            }
+
+            try
+            {
+                long test_phone = long.Parse(phone);
+            }
+            catch (Exception e)
+            {
+                //TempData["error"] = "Phone Number has letters!";
+                return false;
+            }
+            #endregion
+
+            #region Email Validation
+            if (IsValidEmail(email) == false)
+            {
+                //TempData["error"] = "Invalid Email!";
+                return false;
+            }
+            #endregion
+
+            #region Check Passwords
+            //Password matches Confirm
+            if (password != confirm)
+            {
+                //TempData["error"] = "Passwords do not match!";
+                return false;
+            }
+
+            //Password length is 8 or more
+            if (password.Length < 8)
+            {
+                //TempData["error"] = "Password needs to be 8+ characters!";
+                return false;
+            }
+            #endregion
+
+            return true;
+        }
+
+        public async void RegisterUser(User newUser)
+        {
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignUp(string? first_name, string? last_name, string? phone, string? email, string? password, string? confirm)
+        public async Task<IActionResult> SignUp(string? first_name, string? last_name, string? phone, 
+            string? email, string? password, string? confirm)
         {
             //Encryption Object for password
             Encrypt enc = new Encrypt();
+            //Encrypt Passwords
+            string encPassword = enc.EncryptString(password);
 
             #region Check For Empty Fields
             if (String.IsNullOrWhiteSpace(first_name) || String.IsNullOrWhiteSpace(last_name))
@@ -138,63 +217,20 @@ namespace APPR_POE.Controllers
             }
             #endregion
 
-            #region Check phone number
-            if (phone.Length != 10)
-            {
-                TempData["error"] = "Invalid Phone Number!";
-                return View();
-            }
-
-            try
-            {
-                int test_phone = int.Parse(phone);
-            }
-            catch (Exception)
-            {
-                TempData["error"] = "Phone Number has letters!";
-                return View();
-            }
-            #endregion
-
-            #region Email Validation
-            if (IsValid(email) == false)
-            {
-                TempData["error"] = "Invalid Email!";
-                return View();
-            }
-            #endregion
-
-            #region Check Passwords
-            //Password matches Confirm
-            if (password != confirm)
-            {
-                TempData["error"] = "Passwords do not match!";
-                return View();
-            }
-
-            //Password length is 8 or more
-            if (password.Length < 8)
-            {
-                TempData["error"] = "Password needs to be 8+ characters!";
-                return View();
-            }
-
-            //Encrypt Passwords
-            string encPassword = enc.EncryptString(password);
-            #endregion
-
             #region Write new User to Database
-            User newUser = new User();
+            if (ValidRegistration(first_name, last_name, phone, email, password, confirm))
+            {
+                User newUser = new User();
 
-            newUser.first_name = first_name;
-            newUser.last_name = last_name;
-            newUser.email = email;
-            newUser.phone = phone;
-            newUser.password = encPassword;
-            newUser.role = "pending";
+                newUser.first_name = first_name;
+                newUser.last_name = last_name;
+                newUser.email = email;
+                newUser.phone = phone;
+                newUser.password = encPassword;
+                newUser.role = "pending";
 
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+                RegisterUser(newUser);
+            }
             #endregion
 
             TempData["success"] = "Successful registration!";
@@ -203,7 +239,7 @@ namespace APPR_POE.Controllers
         }
 
         //Email Validation
-        private static bool IsValid(string email)
+        public bool IsValidEmail(string email)
         {
             var valid = true;
 
@@ -211,7 +247,7 @@ namespace APPR_POE.Controllers
             {
                 var emailAddress = new MailAddress(email);
             }
-            catch
+            catch (Exception e)
             {
                 valid = false;
             }

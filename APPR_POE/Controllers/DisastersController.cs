@@ -69,28 +69,30 @@ namespace APPR_POE.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DateTime? start_date, DateTime? end_date, string? location, string? description, string? aid_types)
+        public async Task<IActionResult> Create(DateTime start_date, DateTime end_date, string? location, string? description, string? aid_types)
         {
             Disaster d = new Disaster();
 
             #region Input Validation
+            Validation validate = new Validation();
+
             //Start Date
-            try
+            if (validate.IsValidDate(start_date))
             {
-                d.start_date = (DateTime)start_date;
+                d.start_date = start_date;
             }
-            catch (Exception)
+            else
             {
                 TempData["error"] = "Invalid Start Date Selected!";
                 return RedirectToAction("Index");
             }
 
             //End Date
-            try
+            if (validate.IsValidDate(end_date))
             {
-                d.end_date = (DateTime)end_date;
+                d.end_date = end_date;
             }
-            catch (Exception)
+            else
             {
                 TempData["error"] = "Invalid End Date Selected!";
                 return RedirectToAction("Index");

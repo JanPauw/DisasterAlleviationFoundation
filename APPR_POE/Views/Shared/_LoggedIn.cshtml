@@ -11,6 +11,7 @@
     string URL = Accessor.HttpContext.Request.Path;
     bool isLoginPage = URL == "/Users/Login";
     bool isRegisterPage = URL == "/Users/SignUp";
+    bool isPublicPage = URL == "/Home/Index";
 
     if (logged_in == "true")
     {
@@ -22,9 +23,9 @@
 
     if (logged_in != "true")
     {
-        if (!isRegisterPage && !isLoginPage)
+        if (!isRegisterPage && !isLoginPage && !isPublicPage)
         {
-            Context.Response.Redirect("/Users/Login");
+            Context.Response.Redirect("/Home/Index");
         }
     }
 }

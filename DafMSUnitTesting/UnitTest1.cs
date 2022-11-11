@@ -1,6 +1,8 @@
 using APPR_POE.Controllers;
 using APPR_POE.Data;
 using APPR_POE.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -300,6 +302,27 @@ namespace DafMSUnitTesting
         }
         #endregion
 
+        #region Disaster Testing
+        [TestMethod]
+        public void Disaster_Create_Pass()
+        {
+            int DisasterCount_BeforeAdd = _context.Disasters.ToList().Count();
 
+            Disaster d = new Disaster();
+            d.location = "Port Elizabeth, Eastern Cape, South Africa";
+            d.description = "Wind blew over trees";
+            d.aid_types = "Volunteers";
+            d.created_by = "pauwcoetzee@gmail.com";
+
+            _context.Disasters.Add(d);
+            _context.SaveChanges();
+
+            int DisasterCount_AfterAdd = _context.Disasters.ToList().Count();
+
+            int DisasterCountDifference = DisasterCount_AfterAdd - DisasterCount_BeforeAdd;
+
+            Assert.AreEqual(1, DisasterCountDifference);
+        }
+        #endregion
     }
 }

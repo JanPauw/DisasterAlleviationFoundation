@@ -1,5 +1,28 @@
-# Changelog Test
+# Changelog
 All notable changes to this project will be documented in this file.
+
+## [Final_POE] - 2022-11-11
+### Added
+- 'Home' Public Page
+    - Can view Total Goods Donations Received.
+    - Can view Total Money Donations Received.
+    - Can view All Disasters.
+    - Can view Allocations Made to each Disaster.
+- Unit Testing
+    - Testing all Models with the Database.
+    - Testing main features of Database, outside of reading and writing to and from the database.
+- Auto-Deployment Pipeline
+    - When merges are made to the Master Branch, the pipeline auto-deploys, and updates the live website.
+
+### Changed
+- Updated more pages to modals instead of full pages for one form.
+- Modularized some pages, for better testing, and test cases.
+- Further improved validation, to include more test cases.
+- Readme.md:
+    - Updated to reflect notable changes to the application.
+
+### Removed
+- Pages that are no longer in need because of modal changes.
 
 ## [Part_2] - 2022-10-17
 ### Added

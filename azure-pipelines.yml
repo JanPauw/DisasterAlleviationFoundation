@@ -28,7 +28,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
+  displayName: Run Visual studio tests
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: test
+    projects: '*/Unit/.csproj'
+    arguments: '--configuration debug'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'publish artifacts'

@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace DafMSUnitTesting
 {
     [TestClass]
     public class UnitTest1
     {
+        private readonly ILogger<HomeController> _logger;
         private readonly Db_Context _context;
 
         public UnitTest1()
@@ -28,6 +30,7 @@ namespace DafMSUnitTesting
             _context.Database.EnsureCreated();
 
             Users_PopulateDB();
+            Home_PopulateDB();
         }
 
         #region User Testing
@@ -322,6 +325,86 @@ namespace DafMSUnitTesting
             int DisasterCountDifference = DisasterCount_AfterAdd - DisasterCount_BeforeAdd;
 
             Assert.AreEqual(1, DisasterCountDifference);
+        }
+        #endregion
+
+        #region Home Controller Testing
+        [TestMethod]
+        public async Task Home_GetAllocations()
+        {
+            HomeController homeController = new HomeController(_logger, _context);
+
+            List<Allocation> allocations = await homeController.GetAllocations();
+
+            Assert.IsNotNull(allocations);
+            Assert.AreEqual(6, allocations.Count);
+        }
+
+        public void Home_PopulateDB()
+        {
+            #region Disaster
+            Disaster d = new Disaster();
+            d.location = "Port Elizabeth, Eastern Cape, South Africa";
+            d.description = "Wind blew over trees";
+            d.aid_types = "Volunteers";
+            d.created_by = "pauwcoetzee@gmail.com";
+
+            _context.Disasters.Add(d);
+            _context.SaveChanges();
+            #endregion
+
+            #region GoodsAllocations
+            //GoodsAllocation 1
+            GoodsAllocation ga1 = new GoodsAllocation();
+            ga1.quantity = 1;
+            ga1.disaster_id = d.id;
+            ga1.date = DateTime.Now;
+            ga1.category = "Food";
+
+            //GoodsAllocation 2
+            GoodsAllocation ga2 = new GoodsAllocation();
+            ga2.quantity = 2;
+            ga2.disaster_id = d.id;
+            ga2.date = DateTime.Now;
+            ga2.category = "Food";
+
+            //GoodsAllocation 3
+            GoodsAllocation ga3 = new GoodsAllocation();
+            ga3.quantity = 4;
+            ga3.disaster_id = d.id;
+            ga3.date = DateTime.Now;
+            ga3.category = "Blankets";
+
+            _context.GoodsAllocations.Add(ga1);
+            _context.GoodsAllocations.Add(ga2);
+            _context.GoodsAllocations.Add(ga3);
+            #endregion
+
+            #region MoneyAllocations
+            //MoneyAllocation 1
+            MoneyAllocation ma1 = new MoneyAllocation();
+            ma1.amount = 100;
+            ma1.disaster_id = d.id;
+            ma1.date = DateTime.Now;
+
+            //MoneyAllocation 2
+            MoneyAllocation ma2 = new MoneyAllocation();
+            ma2.amount = 100;
+            ma2.disaster_id = d.id;
+            ma2.date = DateTime.Now;
+
+            //MoneyAllocation 3
+            MoneyAllocation ma3 = new MoneyAllocation();
+            ma3.amount = 100;
+            ma3.disaster_id = d.id;
+            ma3.date = DateTime.Now;
+
+            _context.MoneyAllocations.Add(ma1);
+            _context.MoneyAllocations.Add(ma2);
+            _context.MoneyAllocations.Add(ma3);
+            #endregion
+
+            _context.SaveChanges();
         }
         #endregion
     }

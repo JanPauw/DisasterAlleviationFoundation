@@ -28,9 +28,7 @@ namespace APPR_POE.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(string? email, string? password)
+        public bool ValidLogin(string email, string password)
         {
             //Encryption Object for password
             Encrypt enc = new Encrypt();
@@ -38,8 +36,8 @@ namespace APPR_POE.Controllers
             //Check if inputs are not empty
             if (String.IsNullOrWhiteSpace(email) || String.IsNullOrWhiteSpace(password))
             {
-                TempData["error"] = "Fields cannot be empty!";
-                return View();
+                //TempData["error"] = "Fields cannot be empty!";
+                return false;
             }
 
             //encrypt input password for checking
@@ -52,38 +50,43 @@ namespace APPR_POE.Controllers
             //check if user is found
             if (objUser == null)
             {
-                TempData["error"] = "Email is not registered! Please sign up.";
-                return View();
+                //TempData["error"] = "Email is not registered! Please sign up.";
+                return false;
             }
 
             //check if email matches
             if (objUser.email != email)
             {
-                TempData["error"] = "Invalid Login Credentials!";
-                return View();
+                //TempData["error"] = "Invalid Login Credentials!";
+                return false;
             }
 
             //check if password matches
             if (objUser.password != password)
             {
-                TempData["error"] = "Invalid Login Credentials!";
-                return View();
+                //TempData["error"] = "Invalid Login Credentials!";
+                return false;
             }
 
             //check if user is still pending
             if (objUser.role == "pending")
             {
-                TempData["error"] = "Your account is still pending authorization!";
-                return View();
+                //TempData["error"] = "Your account is still pending authorization!";
+                return false;
             }
 
             //check if user is denied access
             if (objUser.role == "denied")
             {
-                TempData["error"] = "Your account has been denied access!";
-                return View();
+                //TempData["error"] = "Your account has been denied access!";
+                return false;
             }
 
+            return true;
+        }
+
+        public void SetUserSessions(User objUser)
+        {
             HttpContext.Session.SetString("email", objUser.email);
             HttpContext.Session.SetString("password", objUser.password);
             HttpContext.Session.SetString("first_name", objUser.first_name);
@@ -91,10 +94,29 @@ namespace APPR_POE.Controllers
             HttpContext.Session.SetString("phone", objUser.phone);
             HttpContext.Session.SetString("role", objUser.role);
             HttpContext.Session.SetString("logged_in", "true");
+        }
 
-            TempData["success"] = "You are now logged in!";
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string? email, string? password)
+        {
+            if (!String.IsNullOrWhiteSpace(email) && !String.IsNullOrWhiteSpace(password))
+            {
+                if (ValidLogin(email, password))
+                {
+                    TempData["success"] = "You are now logged in!";
 
-            return RedirectToAction("Details", new { id = objUser.email });
+                    User u = _context.Users.Find(email);
+
+                    SetUserSessions(u);
+
+                    var UserID = HttpContext.Session.GetString("email");
+
+                    return RedirectToAction("Details", new { id = UserID });
+                }
+            }
+
+            return View();
         }
 
         public IActionResult Logout()

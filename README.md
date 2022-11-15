@@ -1,7 +1,27 @@
-# Changelog Test
+# Disaster Alleviation Foundation
+This web app allows users to register and keep track of current disasters around the world. 
+Users can also make monetary and goods donations, which can then be allocated to specific disasters. 
+
+This web app was developed using Visual Studio and C# (ASP.NET Core 6.0). 
+To store the app’s data Entity Framework Core along with dependency injection was used to communicate with an SQL Database hosted on Azure.
+
+# Features
+- Users can log in securely to the web application and edit information.
+- Users can make monetary and goods donations.
+- Users can choose whether to donate publicly or anonymously.
+- When donating goods, users can select from pre-configured categories or make their own.
+- Users can load new disasters on the system.
+- Once donations are received and disasters are loaded on the system. Users can allocate donations to specific disasters.
+- Non registered users, can view a public page, displaying:
+    - Total monetary and goods donations received.
+    - Currently active disasters, with all donations allocated to them.
+    
+[Current Version Live Demo](https://appr-poe.azurewebsites.net)
+
+# Changelog
 All notable changes to this project will be documented in this file.
 
-## [Final_POE] - 2022-11-11
+## [Final Release] - 2022-11-11
 ### Added
 - 'Home' Public Page
     - Can view Total Goods Donations Received.
@@ -24,7 +44,7 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Pages that are no longer in need because of modal changes.
 
-## [Part_2] - 2022-10-17
+## [Part 2] - 2022-10-17
 ### Added
 - 'Disaster Details' page:
     - Allocate money.
@@ -44,7 +64,7 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Pages that are no longer in need because of modal changes.
 
-## [Part_1] - 2022-09-14
+## [Part 1] - 2022-09-14
 ### Added
 - Login and Registration.
 - Logout.

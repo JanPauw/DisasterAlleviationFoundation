@@ -1,13 +1,19 @@
-<img src="https://user-images.githubusercontent.com/80828952/202770311-ef70b0a6-e65e-4378-85d5-0774102aed6a.png" />
+![Github Heading-1](https://user-images.githubusercontent.com/80828952/202773863-272709cd-31ae-4200-9284-aa47f9e4a70f.png)
 
-# Disaster Alleviation Foundation
-This web app allows users to register and keep track of current disasters around the world. 
-Users can also make monetary and goods donations, which can then be allocated to specific disasters. 
+# DisasterAlleviationFoundation
 
-This web app was developed using Visual Studio and C# (ASP.NET Core 6.0). 
-To store the app’s data Entity Framework Core along with dependency injection was used to communicate with an SQL Database hosted on Azure.
+This web app allows users to register and keep track of current disasters around the world. Users can also make monetary and goods donations, which can then be allocated to specific disasters.
 
-## Features!
+
+## Tech Stack
+
+**Client:** HTML, C# (ASP.NET 6), CSS, Bootstrap
+
+**Server:** Azure SQL, Azure Devops, Azure App Services
+
+
+## Features
+
 - Users can log in securely to the web application and edit information.
 - Users can make monetary and goods donations.
 - Users can choose whether to donate publicly or anonymously.
@@ -17,89 +23,47 @@ To store the app’s data Entity Framework Core along with dependency injection 
 - Non registered users, can view a public page, displaying:
     - Total monetary and goods donations received.
     - Currently active disasters, with all donations allocated to them.
-    
-[Current Version Live Demo](https://appr-poe.azurewebsites.net)
+## Screenshots
 
-# Changelog
-All notable changes to this project will be documented in this file.
+### Home
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202771920-9c0aa389-cdce-466b-8d01-473e3edca984.png)
 
-## [Final Release] - 2022-11-11
-### Added
-- 'Home' Public Page
-    - Can view Total Goods Donations Received.
-    - Can view Total Money Donations Received.
-    - Can view All Disasters.
-    - Can view Allocations Made to each Disaster.
-- Unit Testing
-    - Testing all Models with the Database.
-    - Testing main features of Database, outside of reading and writing to and from the database.
-- Auto-Deployment Pipeline
-    - When merges are made to the Master Branch, the pipeline auto-deploys, and updates the live website.
+### Sign Up
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772106-1229cfee-d43c-4e7f-839c-a0f01f424b88.png)
 
-### Changed
-- Updated more pages to modals instead of full pages for one form.
-- Modularized some pages, for better testing, and test cases.
-- Further improved validation, to include more test cases.
-- Readme.md:
-    - Updated to reflect notable changes to the application.
+### Login
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772134-a601e9e4-d40a-411b-a42f-169ec9f76f80.png)
 
-### Removed
-- Pages that are no longer in need because of modal changes.
+### My Account
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772156-1968e418-4a21-49c8-a97d-6314803a2f75.png)
 
-## [Part 2] - 2022-10-17
-### Added
-- 'Disaster Details' page:
-    - Allocate money.
-    - Allocate goods.
-    - View allocation history.
-- 'Goods Inventory' page:
-    - Acquire new goods using money received from donations.
-    - View all goods (Donated or Acquired), and the stock/quantity.
+### Add Money Donation
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772192-308a33a3-d182-4404-b865-1483ccc9a4f1.png)
 
-### Changed
-- Now using modals instead of full pages that contain only one form for one purpose.
-- Incorrect button labels.
-- Improved Form Validation to check for more cases.
-- Readme.md:
-    - Updated to reflect notable changes to the application.
+### Add Goods Donation
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772234-b3be7200-78de-460a-9583-759fb0ad8cb7.png)
 
-### Removed
-- Pages that are no longer in need because of modal changes.
+### All Money Donations
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772259-4c713809-9901-48a4-8976-0d704d7e6ce5.png)
 
-## [Part 1] - 2022-09-14
-### Added
-- Login and Registration.
-- Logout.
-- User roles.
-- 'My Account' page:
-    - Personal details (Name, Surname, Email, Phone Number).
-    - Edit personal details.
-    - Add a money donation.
-    - Add a goods donation.
-    - Pre-defined categories for new goods donations.
-    - Add New Category when donating goods.
-    - View past monetary donations.
-    - View past goods donations.
-- 'Donations' page:
-    - View all past monetary and goods donations.
-- 'Disasters' page:
-    - Add new disaster.
-    - View added disasters.
-    - Specify aid-types in need for disasters.
-    - View aid-types in need for each disaster.
-- 'Disaster Details' page:
-    - View disaster details:
-        - Start & end dates.
-        - Location.
-        - Description.
-        - Created by.
-        - Required aids.
-    - Edit disaster details.
-- 'Users' page:
-    - Accessible by users that have role of 'admin'.
-    - View new registration requests.
-    - Approve or deny new registration requests.
-    - View approved users.
-    - Revoke access for approved users.
-    - View denied users.
-    - Grant access to denied users.
+### All Goods Donations
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772282-7526b9fe-b13f-4a4e-a3b9-bb31a10e5037.png)
+
+### Goods Inventory
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772301-c80d318f-9d98-408f-80e2-cc2f61843cec.png)
+
+### Users (New Registrations)
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772346-c7f5dc33-833d-479b-9537-34bcf28702ea.png)
+
+### Users (Approved Registrations)
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772385-8916aad2-af28-4087-af54-53b513beb3a0.png)
+
+### Users (Denied Registrations)
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772411-6e1febcc-b833-4d1a-9940-fed3cc018cd0.png)
+
+### Disasters List
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772445-9d4144e5-f4a9-42cf-87ff-c209fa0c6c21.png)
+
+### Disaster Details
+![App Screenshot](https://user-images.githubusercontent.com/80828952/202772462-87d127aa-9049-4324-bb2e-f181fd16f58e.png)
+

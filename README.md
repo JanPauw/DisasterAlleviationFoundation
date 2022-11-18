@@ -1,3 +1,5 @@
+<img src="https://user-images.githubusercontent.com/80828952/202770311-ef70b0a6-e65e-4378-85d5-0774102aed6a.png" />
+
 # Disaster Alleviation Foundation
 This web app allows users to register and keep track of current disasters around the world. 
 Users can also make monetary and goods donations, which can then be allocated to specific disasters. 
@@ -5,7 +7,7 @@ Users can also make monetary and goods donations, which can then be allocated to
 This web app was developed using Visual Studio and C# (ASP.NET Core 6.0). 
 To store the app’s data Entity Framework Core along with dependency injection was used to communicate with an SQL Database hosted on Azure.
 
-## Features
+## Features!
 - Users can log in securely to the web application and edit information.
 - Users can make monetary and goods donations.
 - Users can choose whether to donate publicly or anonymously.
